@@ -212,3 +212,33 @@ def quick_sort(nums):  # n^2
             _quick_sort(items, split_index + 1, high)
 
     _quick_sort(nums, 0, nums.get_len() - 1)
+
+def count_sort(nums): #O(MAX_ELEMENT)
+    #Variables to store max and min values in array
+    MAX_ELEMENT=nums.values[0]
+    MIN_ELEMENT=nums.values[0]
+
+    #Loop to identify the max and min values in the array
+    for i in range(0,nums.get_len()):
+        if(nums.values[i]<MIN_ELEMENT):
+            MIN_ELEMENT=nums.values[i]
+        if(nums.values[i]>MAX_ELEMENT):
+            MAX_ELEMENT=nums.values[i]
+    #OFFSET stores necessary offset to store the min value at index 0
+    OFFSET = MIN_ELEMENT * -1
+    
+    #Bucket to store the occurance frequency. The ith element stores the frequency of the number i+OFFSET
+    bucket=[0 for i in range(0,MAX_ELEMENT+1)]
+
+    #Update the frequency bucket after reading each element
+    for i in range(0,nums.get_len()):
+        bucket[nums.values[i] + OFFSET]+=1
+
+    #k stores the index of nums array to be updated next
+    k=0
+    #Create the sorted array from the frequecy values in the bucket.
+    #Readjust the offset before assiging the values to nums array
+    for i in range(0,len(bucket)):
+        for j in range(0,bucket[i]):
+            nums.set(k,i-OFFSET)
+            k=k+1
